@@ -141,21 +141,13 @@ int det(const int *a, size_t n)
       }
       delete[] minor;
     }
-    catch (std::bad_alloc &e)
+    catch (...)
     {
       delete[] minor;
-      throw e;
+      throw;
     }
   }
   return total_det;
-  // пройтись по элементам первой строки
-  // текущий элемент первой строки = опорный элемент
-  // создать матрицу для минора от текущего опорного элемента (new -> исключение)
-  // заполнить минор элементами основной матрицы
-  // у минора меньше размерность на 1
-  // считаем определитель минора
-  // накапливаем определитель
-  // return det;
 }
 
 int main()
@@ -167,15 +159,13 @@ int main()
 
   try
   {
-
     std::cout << det(c, 1) << "\n";
     std::cout << det(b, 2) << "\n";
     std::cout << det(a, 3) << "\n";
     std::cout << det(d, 5) << "\n";
   }
-  catch (std::bad_alloc &e)
+  catch (...)
   {
-    std::cerr << e.what() << "\n";
     return 2;
   }
 }
