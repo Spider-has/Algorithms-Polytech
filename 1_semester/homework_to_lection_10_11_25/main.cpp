@@ -86,10 +86,8 @@ int main()
     return 2;
   }
 
-  int num = 0;
-  while (std::cin >> num)
+  while (std::cin >> arr[i])
   {
-    arr[i] = num;
     i++;
   }
 
