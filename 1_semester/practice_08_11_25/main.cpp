@@ -109,7 +109,16 @@ void fill_minor(const int *parent, int *minor, size_t currI, size_t n)
   }
 }
 
-int det(const int *a, size_t n)
+int *copy(int *arr, size_t k, int *out)
+{
+  while (k--)
+  {
+    *(out++) = *(arr++);
+  }
+  return out;
+}
+
+int det2(const int *a, size_t n)
 {
   if (n == 2)
   {
@@ -123,6 +132,90 @@ int det(const int *a, size_t n)
   {
     return *a;
   }
+  int total_det = 0;
+  for (size_t i = 0; i < n; i++)
+  {
+    int pivot = a[i];
+    int *minor = new int[(n - 1) * (n - 1)];
+    for (size_t l = 1; l < n; l++)
+    {
+      const int *thisRow = a + l * n;
+      int *minRow = minor + (l - 1) * (n - 1);
+      minRow = copy(thisRow, i, minRow);
+      thisRow += (i + 1);
+      copy(thisRow, n - (i + 1), minRow);
+    }
+    try
+    {
+      total_det += pivot * det2(minor, n - 1) * (i % 2 ? -1 : 1);
+      delete[] minor;
+    }
+    catch (...)
+    {
+      delete[] minor;
+      throw;
+    }
+  }
+  return total_det;
+}
+
+int det_to_2x2(const int *b, size_t n)
+{
+  if (n == 2)
+  {
+    return b[0] * b[3] - b[1] * b[2];
+  }
+  else if (n == 0)
+  {
+    return 0;
+  }
+  else if (n == 1)
+  {
+    return *b;
+  }
+  return 0;
+}
+
+int det2(int *b, const int *lhs, size_t n)
+{
+  if (n < 3)
+    return det_to_2x2(lhs, n);
+  int d = 0;
+  for (size_t l = 0; l < n; l++)
+  {
+    int *minor = b;
+    for (size_t i = 1; i < n; i++)
+    {
+      const int *thisRow = lhs + i * n;
+      int *minRow = minor + (i - 1) * (n - 1);
+      minor = copy(thisRow, l, minRow);
+      thisRow += (l + 1);
+      copy(thisRow, n - (l + 1), minRow);
+    }
+    int *next = b + (n - 1) * (n - 1);
+    d += lhs[l] * det2(next, minor, n - 1) * (l % 2 ? -1 : 1);
+  }
+  return d;
+}
+
+size_t calc_minors(size_t n)
+{
+  // дописать
+  return n;
+}
+
+int det2(int *lhs, size_t n)
+{
+  // дописать
+  size_t k = calc_minors(n);
+  int *mem = new int[k];
+  return det2(mem, lhs, n);
+}
+
+int det(const int *a, size_t n)
+{
+  if (n < 3)
+    return det_to_2x2(a, n);
   int total_det = 0;
   for (size_t i = 0; i < n; i++)
   {
@@ -162,7 +255,10 @@ int main()
     std::cout << det(c, 1) << "\n";
     std::cout << det(b, 2) << "\n";
     std::cout << det(a, 3) << "\n";
+    std::cout << det2(a, 3) << "\n";
+
     std::cout << det(d, 5) << "\n";
+    std::cout << det2(d, 5) << "\n";
   }
   catch (...)
   {

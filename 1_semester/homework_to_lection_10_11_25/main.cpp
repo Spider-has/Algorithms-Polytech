@@ -1,6 +1,5 @@
 #include <iostream>
 #include <limits>
-#include <new>
 
 int safe_sum(int a, int b)
 {
@@ -22,14 +21,18 @@ int safe_divide(int a, int b)
 {
   using lim_int = std::numeric_limits<int>;
   const int min_int = lim_int::min();
-  if (a == min_int && b == -1)
+  if (b == 0)
+  {
+    throw std::runtime_error("division by zero");
+  }
+  else if (a == min_int && b == -1)
   {
     throw std::overflow_error("divide");
   }
   return a / b;
 }
 
-void bubble_sort(int *arr, size_t size)
+void selection_sort(int *arr, size_t size)
 {
   for (size_t i = 0; i < size; i++)
   {
@@ -47,7 +50,7 @@ void bubble_sort(int *arr, size_t size)
 
 int calculate_median(int *arr, size_t n)
 {
-  bubble_sort(arr, n);
+  selection_sort(arr, n);
   if (n % 2 == 1)
   {
     return arr[n / 2];
@@ -60,9 +63,8 @@ int calculate_median(int *arr, size_t n)
 
 int main()
 {
-  size_t n = 0;
+  size_t n = 0, i = 0;
   int *arr = nullptr;
-  size_t i = 0;
 
   if (!(std::cin >> n))
   {
