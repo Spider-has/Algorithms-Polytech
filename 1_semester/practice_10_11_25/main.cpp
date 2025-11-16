@@ -36,7 +36,6 @@ void transpose(int *a, int *b, size_t n, size_t m)
   {
     for (int j = n - 1; j >= 0; j--)
     {
-      int curr = a[j * col + i];
       size_t currI = j * col + i;
       size_t neededI = col * n - (n - j);
       while (currI != neededI)
