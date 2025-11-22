@@ -59,9 +59,9 @@ int main()
   }
 }
 
-Ints::Ints(size_t size, int fill) : s(size), data(new int[size])
+Ints::Ints(size_t k, int fill) : s(k), data(k > 0 ? new int[k] : nullptr)
 {
-  for (size_t i = 0; i < size; i++)
+  for (size_t i = 0; i < k; i++)
   {
     data[i] = fill;
   }
