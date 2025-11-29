@@ -112,7 +112,7 @@ const char *out_of_author(const Lib &db)
   if (db.books && db.lib[0])
   {
     authors = new const char *[1];
-    authors_books_count = new size_t[authors_count];
+    authors_books_count = new size_t[1];
     authors_books_count[0] = db.stocks[0];
     authors[0] = db.lib[0]->author;
     authors_count++;
@@ -125,8 +125,8 @@ const char *out_of_author(const Lib &db)
         {
           authors = expanded_char(authors, authors_count, authors_count + 1);
           authors_books_count = expanded_size(authors_books_count, authors_count, authors_count + 1);
-          authors[authors_count + 1] = db.lib[i]->author;
-          authors_books_count[authors_count + 1] = db.stocks[i];
+          authors[authors_count] = db.lib[i]->author;
+          authors_books_count[authors_count] = db.stocks[i];
           authors_count++;
         }
         else
@@ -137,10 +137,8 @@ const char *out_of_author(const Lib &db)
     }
     catch (...)
     {
-      for (size_t i = 0; i < authors_count; i++)
-      {
-        delete[] authors[i];
-      }
+      // Мы тут не удаляем все элементы внутри authors, потому что они ссылаются на оригинальную память исходной
+      // структуры, а её менять нельзя
       delete[] authors;
       delete[] authors_books_count;
       throw;
