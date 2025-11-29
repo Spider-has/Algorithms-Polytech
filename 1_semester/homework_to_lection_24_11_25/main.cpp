@@ -149,7 +149,6 @@ Matrix::Matrix(const Matrix &c):
     m_(c.m_),
     data(c.n_ > 0 && c.m_ > 0 ? new int *[c.n_] : nullptr)
 {
-  size_t i = 0;
   makeMtxRows(data, n_, m_);
   copyMtx(c.data, data, n_, m_);
 }
@@ -175,7 +174,6 @@ Matrix &Matrix::operator=(const Matrix &r)
   {
     return *this;
   }
-  size_t i = 0;
   int **newData = new int *[r.n_];
   makeMtxRows(newData, r.n_, r.m_);
   copyMtx(r.data, newData, r.n_, r.m_);
@@ -252,12 +250,11 @@ Matrix &Matrix::operator*=(const Matrix &r)
     throw std::runtime_error("incorrect matrix sizes to muptily");
   }
   int **newMtx = new int *[n_];
-  size_t i = 0;
+  makeMtxRows(newMtx, n_, r.m_);
   try
   {
-    for (; i < n_; i++)
+    for (size_t i = 0; i < n_; i++)
     {
-      newMtx[i] = new int[r.m_];
       for (size_t j = 0; j < r.m_; j++)
       {
         int result = 0;
@@ -268,16 +265,16 @@ Matrix &Matrix::operator*=(const Matrix &r)
         newMtx[i][j] = result;
       }
     }
-    rm(data, n_);
-    m_ = r.m_;
-    data = newMtx;
-    return *this;
   }
   catch (...)
   {
-    rm(newMtx, i);
+    rm(newMtx, n_);
     throw;
   }
+  rm(data, n_);
+  m_ = r.m_;
+  data = newMtx;
+  return *this;
 }
 
 size_t Matrix::rows() const
@@ -337,10 +334,6 @@ int main()
     Matrix prod = m1;
     prod *= m2;
     printMtx(prod);
-
-    int c[] = {1, 2};
-    Matrix m3(c, 1, 2);
-    printMtx(m3);
 
     int big[] = {std::numeric_limits<int>::max()};
     Matrix overflow(big, 1, 1);
