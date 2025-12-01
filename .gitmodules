@@ -1,3 +1,6 @@
 [submodule "1_semester/practice_01_12_25"]
 	path = 1_semester/practice_01_12_25
 	url = git@github.com:Spider-has/cpp_graphic_practice.git
+[submodule "1_semester/practice_25_10_25"]
+	path = 1_semester/practice_25_10_25
+	url = git@github.com:Spider-has/Vasiliy-Alexandrivich-luchiy-prepodavatel-kto-ne-verit-tot-iscluchaetca.git
