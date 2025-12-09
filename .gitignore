@@ -1,3 +1,6 @@
 *.out
 main
 main.out
+
+.vscode/
+.clang-format
