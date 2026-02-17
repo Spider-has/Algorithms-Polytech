@@ -158,5 +158,4 @@ int main()
 
   Equal_to eq(3);
   remove_if(&a, eq);
-  count(a, eq, )
 }
