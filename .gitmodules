@@ -7,3 +7,7 @@
 [submodule "2_semester/16.02.2026-aisd-lec-homework"]
 	path = 2_semester/16.02.2026-aisd-lec-homework
 	url = git@github.com:Spider-has/aisd-lection-homework-01.git
+[submodule "2_semester/16.02.2026-aisd-prac-homework"]
+	path = 2_semester/16.02.2026-aisd-prac-homework
+	url = git@github.com:Spider-has/aisd-practice-homework-01.git
+	branch = main
