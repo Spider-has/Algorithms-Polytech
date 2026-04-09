@@ -14,3 +14,6 @@
 [submodule "2_semester/17.03.2026-aisd-vector-practice"]
 	path = 2_semester/17.03.2026-aisd-vector-practice
 	url = git@github.com:Spider-has/top-it-vector-practice.git
+[submodule "2_semester/07.04.2026-aisd-homework"]
+	path = 2_semester/07.04.2026-aisd-homework
+	url = git@github.com:Spider-has/07-04-2026-aisd-practice-BTree-travese-iterators-homework.git
