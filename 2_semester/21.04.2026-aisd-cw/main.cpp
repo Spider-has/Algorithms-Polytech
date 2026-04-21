@@ -110,6 +110,16 @@ template < class T > bool includedStructStart(BiTree< T > *lhs_root, BiTree< T >
 
 template < class T > bool inlcludedStruct(BiTree< T > *lhs, BiTree< T > *pattern)
 {
+  pattern = fallLeft(pattern).second;
+  while (lhs)
+  {
+    if (includedStructStart(lhs, pattern))
+    {
+      return true;
+    }
+    lhs = std::get< 2 >(nextStruct(lhs));
+  }
+  return false;
 }
 
 int main()
