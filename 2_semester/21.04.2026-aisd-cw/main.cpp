@@ -77,18 +77,29 @@ template < class T > bool isEqualStruct(BiTree< T > *lhs, BiTree< T > *rhs)
 template < class T > bool includedStructStart(BiTree< T > *lhs_root, BiTree< T > *pattern)
 {
   auto next_pattern = nextStruct(pattern);
-  std::pair< Dir, BiTree< T > * > next_lhs;
+  std::pair< size_t, BiTree< T > * > next_lhs = {0, lhs_root};
   if (std::get< 0 >(next_pattern) == Dir::fall_left)
   {
-    next_lhs = fallLeft(lhs_root);
+    if (next_lhs.second->rt)
+    {
+      next_lhs = fallLeft(next_lhs.second->rt);
+    }
+    else
+    {
+      return false;
+    }
   }
   else
   {
     next_lhs = Parent(lhs_root);
   }
+  std::cout << next_lhs.second->val << "\n";
+  std::cout << std::get< 2 >(next_pattern)->val << "\n";
   while (std::get< 1 >(next_pattern) == next_lhs.first && next_lhs.second && std::get< 2 >(next_pattern))
   {
+
     next_pattern = nextStruct(std::get< 2 >(next_pattern));
+    std::cout << (std::get< 0 >(next_pattern) == Dir::fall_left) << "\n";
     if (std::get< 0 >(next_pattern) == Dir::fall_left)
     {
       if (next_lhs.second->rt)
@@ -105,12 +116,15 @@ template < class T > bool includedStructStart(BiTree< T > *lhs_root, BiTree< T >
       next_lhs = Parent(lhs_root);
     }
   }
+  std::cout << std::get< 1 >(next_pattern) << "\n";
+  std::cout << (std::get< 2 >(next_pattern) == nullptr) << "\n";
   return std::get< 1 >(next_pattern) == next_lhs.first && std::get< 2 >(next_pattern) == nullptr;
 }
 
 template < class T > bool inlcludedStruct(BiTree< T > *lhs, BiTree< T > *pattern)
 {
   pattern = fallLeft(pattern).second;
+  lhs = fallLeft(lhs).second;
   while (lhs)
   {
     if (includedStructStart(lhs, pattern))
@@ -130,7 +144,8 @@ int main()
 
   BiTree< int > *B = new BiTree< int >{4, nullptr, nullptr, nullptr};
   BiTree< int > *BLeft = new BiTree< int >{3, nullptr, nullptr, B};
-  B->lt = BLeft;
+  B->rt = BLeft;
 
   std::cout << isEqualStruct< int >(A, B) << "\n";
+  std::cout << inlcludedStruct(A, B) << "\n";
 }
