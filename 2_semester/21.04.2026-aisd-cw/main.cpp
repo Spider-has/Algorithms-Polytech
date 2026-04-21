@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <iostream>
 #include <tuple>
+#include <utility>
 
 template < class T > struct BiTree
 {
@@ -71,6 +72,44 @@ template < class T > bool isEqualStruct(BiTree< T > *lhs, BiTree< T > *rhs)
     rn = nextStruct(std::get< 2 >(rn));
   }
   return ln == rn;
+}
+
+template < class T > bool includedStructStart(BiTree< T > *lhs_root, BiTree< T > *pattern)
+{
+  auto next_pattern = nextStruct(pattern);
+  std::pair< Dir, BiTree< T > * > next_lhs;
+  if (std::get< 0 >(next_pattern) == Dir::fall_left)
+  {
+    next_lhs = fallLeft(lhs_root);
+  }
+  else
+  {
+    next_lhs = Parent(lhs_root);
+  }
+  while (std::get< 1 >(next_pattern) == next_lhs.first && next_lhs.second && std::get< 2 >(next_pattern))
+  {
+    next_pattern = nextStruct(std::get< 2 >(next_pattern));
+    if (std::get< 0 >(next_pattern) == Dir::fall_left)
+    {
+      if (next_lhs.second->rt)
+      {
+        next_lhs = fallLeft(next_lhs.second->rt);
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else
+    {
+      next_lhs = Parent(lhs_root);
+    }
+  }
+  return std::get< 1 >(next_pattern) == next_lhs.first && std::get< 2 >(next_pattern) == nullptr;
+}
+
+template < class T > bool inlcludedStruct(BiTree< T > *lhs, BiTree< T > *pattern)
+{
 }
 
 int main()
