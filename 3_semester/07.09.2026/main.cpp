@@ -71,3 +71,55 @@ int main()
   std::cout << "is future failed: " << ft.get() << "\n";
 }
 #endif
+
+#ifdef HOMEWORK
+
+#include <future>
+#include <random>
+#include <vector>
+
+bool isInside(double x, double y, double r)
+{
+  return ((x - r) * (x - r)) + ((y - r) * (y - r)) <= r * r;
+}
+
+size_t calc(double r, size_t tests, size_t seed)
+{
+  std::default_random_engine engine(seed);
+
+  std::uniform_real_distribution< double > dist(0.0, 2 * r);
+  size_t succed = 0;
+  for (size_t i = 0; i < tests; ++i)
+  {
+    succed += isInside(dist(engine), dist(engine), r);
+  }
+  return succed;
+}
+
+double area(double r, size_t thread, size_t tests)
+{
+  std::vector< std::future< size_t > > threads_vec;
+
+  size_t n = tests / thread;
+  size_t mod = tests % thread;
+  for (size_t i = 0; i < thread - 1; ++i)
+  {
+    threads_vec.emplace_back(std::async(std::launch::async, calc, r, n, i));
+  }
+  threads_vec.emplace_back(std::async(std::launch::async, calc, r, n, thread));
+  size_t success = 0;
+  for (size_t i = 0; i < thread; ++i)
+  {
+    success += threads_vec[i].get();
+  }
+  std::cout << success << "\n";
+  return (double(success) / double(tests)) * (4 * r);
+}
+
+int main()
+{
+  std::cout << area(1, 4, 100000000) << "\n";
+  return 0;
+}
+
+#endif
